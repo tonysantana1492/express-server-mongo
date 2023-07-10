@@ -1,34 +1,34 @@
-const config = require('.')
-const mongoose = require('mongoose')
-const logger = require('../utils/logger')
+const config = require('.');
+const mongoose = require('mongoose');
+const logger = require('../utils/logger');
 
 module.exports = function (app) {
-  logger.info('connecting to', config.MONGODB_URI)
+  logger.info('connecting to', config.MONGODB_URI);
 
-  mongoose.set('strictQuery', true)
+  mongoose.set('strictQuery', true);
 
   mongoose
     .connect(config.MONGODB_URI)
     .then(() => {
-      logger.info('connected to MongoDB')
+      logger.info('connected to MongoDB');
     })
     .catch((error) => {
-      logger.error('error connecting to MongoDB:', error.message)
-    })
+      logger.error('error connecting to MongoDB:', error.message);
+    });
 
-  mongoose.Promise = global.Promise
+  mongoose.Promise = global.Promise;
 
-  process.on('SIGINT', cleanup)
-  process.on('SIGTERM', cleanup)
-  process.on('SIGHUP', cleanup)
+  process.on('SIGINT', cleanup);
+  process.on('SIGTERM', cleanup);
+  process.on('SIGHUP', cleanup);
 
   if (app) {
-    app.set('mongoose', mongoose)
+    app.set('mongoose', mongoose);
   }
-}
+};
 
 function cleanup() {
   mongoose.connection.close(function () {
-    process.exit(0)
-  })
+    process.exit(0);
+  });
 }
